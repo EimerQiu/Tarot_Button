@@ -119,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
         // Add the image file
         request.files
-            .add(await http.MultipartFile.fromPath('picture', newImage.path));
+            .add(await http.MultipartFile.fromPath('image', newImage.path));
 
         // Add other fields
         request.fields['name'] = name;
