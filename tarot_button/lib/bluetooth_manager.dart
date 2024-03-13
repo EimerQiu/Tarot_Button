@@ -78,7 +78,7 @@ class BluetoothManager {
     List<LineText> messageList = [
       LineText(
           type: LineText.TYPE_TEXT,
-          content: '************ https://aibutton.tech ************',
+          content: '************ AI-Button ************',
           align: LineText.ALIGN_CENTER,
           linefeed: 1),
     ];
@@ -116,7 +116,7 @@ class BluetoothManager {
           originalImage.width > 0 &&
           originalImage.height > 0) {
         // Ensure new dimensions are positive
-        int newWidth = 384; // Example width, adjust as necessary
+        int newWidth = 400; // Example width, adjust as necessary
         int newHeight =
             (originalImage.height * (newWidth / originalImage.width)).round();
         if (newWidth > 0 && newHeight > 0) {
@@ -146,8 +146,14 @@ class BluetoothManager {
 
     printList.add(LineText(
         type: LineText.TYPE_TEXT,
-        content: title,
+        content: '************ AI TAROT | AI塔罗牌 ************\n',
         align: LineText.ALIGN_CENTER,
+        linefeed: 1));
+
+    printList.add(LineText(
+        type: LineText.TYPE_TEXT,
+        content: title,
+        align: LineText.ALIGN_LEFT,
         weight: 1,
         size: 2,
         linefeed: 1));
@@ -156,21 +162,33 @@ class BluetoothManager {
       try {
         File imageFile = File(imagePath);
         Uint8List imageBytes = await imageFile.readAsBytes();
-        developer.log('Image loaded, size: ${imageBytes.length} bytes');
+        developer.log(
+            'printContent: Image loaded, size: ${imageBytes.length} bytes');
 
         Uint8List? processedImageBytes =
             await processImageForPrinting(imageBytes);
         if (processedImageBytes != null) {
-          String base64Image = base64Encode(processedImageBytes);
-          developer.log('Image processed and converted to Base64');
+          // Decode the image to get its dimensions for logging
+          img.Image? processedImage = img.decodeImage(processedImageBytes);
+          if (processedImage != null) {
+            developer.log(
+                'printContent: Processed image width: ${processedImage.width}, height: ${processedImage.height}');
+          }
 
-          printList
-              .add(LineText(type: LineText.TYPE_IMAGE, content: base64Image));
+          String base64Image = base64Encode(processedImageBytes);
+          developer
+              .log('printContent: Image processed and converted to Base64');
+
+          printList.add(LineText(
+              type: LineText.TYPE_IMAGE,
+              content: base64Image,
+              width: 400,
+              height: 600));
         } else {
-          developer.log('Image processing failed.', level: 1000);
+          developer.log('printContent: Image processing failed.', level: 1000);
         }
       } catch (e) {
-        developer.log('Error processing image: $e', level: 1000);
+        developer.log('printContent: Error processing image: $e', level: 1000);
       }
     }
 
@@ -182,6 +200,12 @@ class BluetoothManager {
           align: LineText.ALIGN_LEFT,
           linefeed: 1));
     }
+
+    printList.add(LineText(
+        type: LineText.TYPE_TEXT,
+        content: '************ https://aibutton.tech ************\n',
+        align: LineText.ALIGN_CENTER,
+        linefeed: 1));
 
     if (printList.isNotEmpty) {
       try {

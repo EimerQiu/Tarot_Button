@@ -35,7 +35,7 @@ class DisplayPage extends StatelessWidget {
                 // Call printContent of BluetoothManager
                 bluetoothManager.printContent(
                   title: title,
-                  // imagePath: imagePath, //有bug，先不传图片
+                  imagePath: imagePath, //有bug，先不传图片
                   content: content,
                 );
               },

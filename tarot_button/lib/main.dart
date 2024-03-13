@@ -113,32 +113,39 @@ class _MyHomePageState extends State<MyHomePage> {
         final File newImage = await File(image.path).copy(filePath);
         print('_onMeowPressed: Image saved at: $filePath');
 
-        // Prepare for uploading the image
+        // Prepare for uploading the image and other data
         var request = http.MultipartRequest(
             'POST', Uri.parse('https://aibutton.tech/taro'));
+
+        // Add the image file
         request.files
             .add(await http.MultipartFile.fromPath('picture', newImage.path));
+
+        // Add other fields
+        request.fields['name'] = name;
+        request.fields['question'] = question;
 
         // Send the request
         var response = await request.send();
 
         // Simulate the response content
-        // if (response.statusCode == 200) {    // original code
-        if (true) {
+        if (response.statusCode == 200) {
+          // original code
+          // if (true) {
           // Parse the response
           String responseBody = await response.stream.bytesToString();
 
           // Simulate the response content
           // responseBody = "Hello, world";
-          responseBody = "\nHello, $name! \n\n"
-              "The image shows the Nine of Pentacles from a tarot deck, which is often associated with abundance, self-sufficiency, and financial stability. The card depicts a figure standing in a garden of grapevines, symbolizing the fruits of one's labor and the rewards of diligence and hard work. The nine pentacles arranged in a lush environment suggest a time of personal achievement and material gain.\n\n"
-              "As a fortune teller interpreting this card for your luck in 2024, it would bode well for prosperity and comfort. The card indicates that through continued effort and maintaining a clear vision of your goals, you will likely find yourself in a position of both financial and personal fulfillment.\n"
-              "Regarding the question about receiving an offer from Stevenson school this month, the Nine of Pentacles is a positive omen, suggesting that the outcome you are hoping for is within reach. However, remember that tarot readings are not definitive answers but rather reflections of potential outcomes based on current circumstances.\n"
-              "Keep putting forth your best efforts, and stay optimistic about the opportunities ahead.\n\n"
-              "这张图片显示了塔罗牌上的星币九，它通常与丰富、自给自足和财务稳定联系在一起。这张牌描绘了一个站在葡萄藤花园里的人物，象征着一个人的劳动成果以及勤奋和努力的回报。努力工作。郁郁葱葱的环境中排列的九个星币暗示着个人成就和物质收获的时期。\n\n"
-              "作为一名算命师，这张牌为你解读2024年的好运，这将是繁荣和舒适的好兆头。这张牌表明，通过持续努力和保持对目标的清晰愿景，你可能会发现自己处于财务和幸福的境地，和个人成就感。\n\n"
-              "关于本月收到史蒂文森学校录取通知书的问题，星币九是一个积极的预兆，表明你所希望的结果是触手可及的。但是，请记住，塔罗牌占卜并不是确定的答案，而是潜力的反映。根据当前情况得出的结果。\n\n"
-              "继续尽最大努力，并对未来的机会保持乐观。\n\n";
+          // responseBody = "\nHello, $name! \n\n"
+          //     "The image shows the Nine of Pentacles from a tarot deck, which is often associated with abundance, self-sufficiency, and financial stability. The card depicts a figure standing in a garden of grapevines, symbolizing the fruits of one's labor and the rewards of diligence and hard work. The nine pentacles arranged in a lush environment suggest a time of personal achievement and material gain.\n\n"
+          //     "As a fortune teller interpreting this card for your luck in 2024, it would bode well for prosperity and comfort. The card indicates that through continued effort and maintaining a clear vision of your goals, you will likely find yourself in a position of both financial and personal fulfillment.\n"
+          //     "Regarding the question about receiving an offer from Stevenson school this month, the Nine of Pentacles is a positive omen, suggesting that the outcome you are hoping for is within reach. However, remember that tarot readings are not definitive answers but rather reflections of potential outcomes based on current circumstances.\n"
+          //     "Keep putting forth your best efforts, and stay optimistic about the opportunities ahead.\n\n"
+          //     "这张图片显示了塔罗牌上的星币九，它通常与丰富、自给自足和财务稳定联系在一起。这张牌描绘了一个站在葡萄藤花园里的人物，象征着一个人的劳动成果以及勤奋和努力的回报。努力工作。郁郁葱葱的环境中排列的九个星币暗示着个人成就和物质收获的时期。\n\n"
+          //     "作为一名算命师，这张牌为你解读2024年的好运，这将是繁荣和舒适的好兆头。这张牌表明，通过持续努力和保持对目标的清晰愿景，你可能会发现自己处于财务和幸福的境地，和个人成就感。\n\n"
+          //     "关于本月收到史蒂文森学校录取通知书的问题，星币九是一个积极的预兆，表明你所希望的结果是触手可及的。但是，请记住，塔罗牌占卜并不是确定的答案，而是潜力的反映。根据当前情况得出的结果。\n\n"
+          // "继续尽最大努力，并对未来的机会保持乐观。\n\n";
 
           String title = "$name: $question";
           String imagePath = newImage.path;
