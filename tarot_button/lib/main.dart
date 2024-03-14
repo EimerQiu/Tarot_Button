@@ -1,5 +1,6 @@
 // main.dart
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
@@ -143,9 +144,18 @@ class _MyHomePageState extends State<MyHomePage> {
           String responseBody = await response.stream.bytesToString();
           print('_onMeowPressed: Response received: $responseBody');
 
+          // Parse the JSON response
+          Map<String, dynamic> jsonResponse = jsonDecode(responseBody);
+
+          // Extract the 'message' field
+          String messageContent = jsonResponse['message'];
+
           String title = "$name: $question";
           String imagePath = newImage.path;
-          String content = responseBody;
+
+          // Use the extracted message for the content
+          String content = "Hi " + name + ",\n" + messageContent;
+
           print('_onMeowPressed: Navigating to DisplayPage');
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => DisplayPage(

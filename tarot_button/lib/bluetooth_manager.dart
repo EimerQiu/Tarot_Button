@@ -116,7 +116,7 @@ class BluetoothManager {
           originalImage.width > 0 &&
           originalImage.height > 0) {
         // Ensure new dimensions are positive
-        int newWidth = 400; // Example width, adjust as necessary
+        int newWidth = 300; // Example width, adjust as necessary
         int newHeight =
             (originalImage.height * (newWidth / originalImage.width)).round();
         if (newWidth > 0 && newHeight > 0) {
@@ -182,8 +182,8 @@ class BluetoothManager {
           printList.add(LineText(
               type: LineText.TYPE_IMAGE,
               content: base64Image,
-              width: 400,
-              height: 600));
+              width: 300,
+              height: 450));
         } else {
           developer.log('printContent: Image processing failed.', level: 1000);
         }
@@ -196,7 +196,7 @@ class BluetoothManager {
       developer.log('printContent: Printing content');
       printList.add(LineText(
           type: LineText.TYPE_TEXT,
-          content: content,
+          content: "\n" + content,
           align: LineText.ALIGN_LEFT,
           linefeed: 1));
     }
