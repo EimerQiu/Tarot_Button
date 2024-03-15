@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // Define the variables for name and question
   String name = 'Eimer';
-  String question = 'Will my dreams come true?';
+  String question = 'Will i be accepted by Stanford in the future?';
 
   @override
   void initState() {
@@ -126,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
         // Prepare for uploading the image and other data
         var request = http.MultipartRequest(
-            'POST', Uri.parse('http://192.168.10.65:8000/tarot'));
+            'POST', Uri.parse('https://aibutton.tech/tarot'));
         print('_onMeowPressed: Preparing HTTP request');
         request.files
             .add(await http.MultipartFile.fromPath('image', newImage.path));
@@ -154,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
           String imagePath = newImage.path;
 
           // Use the extracted message for the content
-          String content = "Hi " + name + ",\n" + messageContent;
+          String content = "Hello, " + name + "!\n" + messageContent;
 
           print('_onMeowPressed: Navigating to DisplayPage');
           Navigator.of(context).push(MaterialPageRoute(
