@@ -13,9 +13,9 @@
     <!-- If targeting Android 10 (API level 29) or higher, use this instead for write permission -->
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
    <application
-        android:label="tarot_button"
+        android:label="Tarot-Button"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"
