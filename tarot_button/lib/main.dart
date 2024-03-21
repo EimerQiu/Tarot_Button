@@ -54,8 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Color bluetoothIconColor = Colors.grey; // Initial color of the Bluetooth icon
 
   // Define the variables for name and question
-  String name = 'Eimer';
-  String question = 'Will i be accepted by Stanford in the future?';
+  String name = 'Ciline';
+  String question = 'Should I cook fish tomorrow?';
 
   @override
   void initState() {
@@ -92,68 +92,64 @@ class _MyHomePageState extends State<MyHomePage> {
     _setCurrentCamera(_currentCameraIndex);
   }
 
+  void _showSpinningGlobeDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(width: 20),
+                Text("Loading..."),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   void _onMeowPressed() async {
     try {
-      print('_onMeowPressed: Ensuring controller is initialized');
+      _showSpinningGlobeDialog(); // Show the spinning globe dialog.
+
       // Ensure the controller is initialized
       await _initializeControllerFuture;
-      print('_onMeowPressed: Controller initialized');
 
       // Take the picture
       if (_controller != null) {
-        print('_onMeowPressed: Starting picture-taking process');
         final XFile image = await _controller!.takePicture();
-        print('_onMeowPressed: Picture taken: ${image.path}');
 
         // Save the image in the app's directory
         final Directory extDir = await getApplicationDocumentsDirectory();
         final String dirPath = '${extDir.path}/pictures/';
-        var directory = Directory(dirPath);
-        if (await directory.exists()) {
-          print('_onMeowPressed: Directory already exists');
-        } else {
-          print('_onMeowPressed: Creating directory');
-          await directory.create(recursive: true);
-          print('_onMeowPressed: Directory created');
-        }
+        await Directory(dirPath).create(recursive: true);
         final String filePath =
             join(dirPath, '${DateTime.now().millisecondsSinceEpoch}.png');
-
-        // Copy the file to a new path
-        print('_onMeowPressed: Copying file to new path');
         final File newImage = await File(image.path).copy(filePath);
-        print('_onMeowPressed: Image saved at: $filePath');
 
         // Prepare for uploading the image and other data
         var request = http.MultipartRequest(
             'POST', Uri.parse('https://aibutton.tech/tarot'));
-        print('_onMeowPressed: Preparing HTTP request');
         request.files
             .add(await http.MultipartFile.fromPath('image', newImage.path));
         request.fields['name'] = name;
         request.fields['question'] = question;
 
         // Send the request
-        print('_onMeowPressed: Sending HTTP request');
         var response = await request.send();
-        print(
-            '_onMeowPressed: HTTP request sent, status code: ${response.statusCode}');
 
-        // Simulate the response content
         if (response.statusCode == 200) {
           String responseBody = await response.stream.bytesToString();
-          print('_onMeowPressed: Response received: $responseBody');
-
-          // Parse the JSON response
           Map<String, dynamic> jsonResponse = jsonDecode(responseBody);
-
-          // Extract the 'message' field
           String messageContent = jsonResponse['message'];
-
           String title = "$name: $question";
           String imagePath = newImage.path;
-
-          // Use the extracted message for the content
           String content = "Hello, " + name + "!\n" + messageContent;
 
           print('_onMeowPressed: Navigating to DisplayPage');
@@ -173,6 +169,11 @@ class _MyHomePageState extends State<MyHomePage> {
     } catch (e) {
       print('_onMeowPressed: Exception caught: $e');
     }
+
+    // finally {
+    //   Navigator.of(context, rootNavigator: true)
+    //       .pop(); // Close the spinning globe dialog.
+    // }
   }
 
   @override
